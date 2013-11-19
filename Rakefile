@@ -17,8 +17,8 @@ Jeweler::Tasks.new do |gem|
   gem.name = "spectrum-analyzer"
   gem.homepage = "http://github.com/jusroberts/spectrum-analyzer"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = %Q{Analyze a wav file for specific frequency signatures}
+  gem.description = %Q{Analyze a wav file for specific frequency signatures}
   gem.email = "justin.roberts@careerbuilder.com"
   gem.authors = ["Justin Roberts"]
   # dependencies defined in Gemfile
