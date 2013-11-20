@@ -58,5 +58,8 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<jeweler>, ["~> 1.8.7"])
     s.add_dependency(%q<simplecov>, [">= 0"])
   end
+
+  s.add_dependency('fftw3')
+  s.add_dependency('ruby-audio')
 end
 
