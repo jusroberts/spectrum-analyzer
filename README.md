@@ -26,7 +26,7 @@ g.build_spectrum
 You now have a bunch of "domains" held in the spectrum (SpectrumAnalyzer.spectrum)
 ```ruby
 s = SpectrumAnalyzer.spectrum
-s.domains[0].whatever
+s.domains
 ```
 These domains are an array of frequencies that occur over the time slice defined by the window_size. The values are currently complex numbers, but they represent decibels of each frequency range in that window.
 
@@ -42,7 +42,7 @@ More to come.
 * Make sure to add tests for it. This is important so I don't break it in a future version unintentionally.
 * Please try not to mess with the Rakefile, version, or history. If you want to have your own version, or is otherwise necessary, that is fine, but please isolate to its own commit so I can cherry-pick around it.
 
-== Copyright
+##Copyright
 
 Copyright (c) 2013 Justin Roberts. See LICENSE.txt for
 further details.
