@@ -5,6 +5,8 @@ module SpectrumAnalyzer
     def initialize()
       @values = []
       @raw_values = []
+      @contains_frequency_range = false
     end
+
   end
 end

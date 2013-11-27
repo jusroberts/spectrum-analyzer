@@ -42,6 +42,13 @@ module SpectrumAnalyzer
       end
     end
 
+    def sum_domains
+      @spectrum.entire_spectrum = Array.new(@spectrum.domains[0].values.length, 0)
+      @spectrum.domains.each do |domain|
+        @spectrum.entire_spectrum.map!.with_index{ |x,i| x + domain.values[i]}
+      end
+    end
+
     def generate_domain(buffer)
       windowed_array = apply_window(buffer.to_a, windows[@config.window_function])
       na = NArray.to_na(windowed_array)
@@ -52,11 +59,31 @@ module SpectrumAnalyzer
     end
 
     def analyze_spectrum
-      #for each FFT window in spectrum class
-        #determine if window contains hit
-          #apply hit bool to that fft object
-      #sum all FFT windows in spectrum to create overall freq spectrum
-      #return spectrum class
+      sum_domains
+      find_occurrences
+    end
+
+    def find_occurrences
+      ranges = @config.analysis_ranges
+      occurrence_count = 0
+      @spectrum.domains.each do |domain|
+        ranges.each do |range|
+          if find_occurrence(range, domain)
+            occurrence_count += 1
+            domain.contains_frequency_range = true
+          end
+        end
+      end
+      @spectrum.num_occurrences = occurrence_count
+    end
+
+    def find_occurrence (range, domain)
+      sum_total = 0
+      for i in range[:b_index]..range[:t_index]
+        sum_total += domain.values[i] if !domain.nil?
+      end
+      average = sum_total / (range[:t_index] - range[:b_index])
+      average > range[:min] and average < range[:max]
     end
 
     def build_file_info
