@@ -1,4 +1,4 @@
-[![Code Climate](https://codeclimate.com/github/jusroberts/spectrum-analyzer.png)](https://codeclimate.com/github/jusroberts/spectrum-analyzer)
+[![Code Climate](https://codeclimate.com/github/jusroberts/spectrum-analyzer.png)](https://codeclimate.com/github/jusroberts/spectrum-analyzer) [![Gem Version](https://badge.fury.io/rb/spectrum-analyzer.png)](http://badge.fury.io/rb/spectrum-analyzer)
 # Ruby Sound Spectrum Analyzer
 
 Have you ever wanted to break apart a sound file and see what frequencies make it up? Well, you're in luck! This program does JUST THAT!!!!
@@ -28,7 +28,7 @@ You now have a bunch of "domains" held in the spectrum (SpectrumAnalyzer.spectru
 s = SpectrumAnalyzer.spectrum
 s.domains
 ```
-These domains are an array of frequencies that occur over the time slice defined by the window_size. The values are currently magnitudes of the complex numbers, and represent the amplitude of each frequency range. 
+These domains are an array of frequencies that occur over the time slice defined by the window_size. The values are currently magnitudes of the complex numbers, and the complex numbers themselves. They represent the amplitude of the frequency ranges. 
 
 Want them to be available as both complex and magnitudes? Let me know, or submit a pull request!
 
