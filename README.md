@@ -15,7 +15,7 @@ c = SpectrumAnalyzer.configuration
 c.file_name = "whatever"
 c.window_function = :hanning #or :rectangular. Those are the only two implemented currently
 c.window_size = 512 #MUST BE A POWER OF 2!!!! 128, 256, 512, 1024, etc. If not, I cannot guarantee your results. In fact, you'll probably break FFTW3. Sorry.
-c.analysis_array = [] #This does nothing right now. #eventually
+c.analysis_ranges = [] #This does things! Put an array with values you want to define your analysis range.
 ```
 
 generate a spectrum
@@ -23,16 +23,14 @@ generate a spectrum
 g = SpectrumAnalyzer.generate
 g.build_spectrum
 ```
-You now have a bunch of "domains" held in the spectrum (SpectrumAnalyzer.spectrum)
+You now have a bunch of "domains" held in the spectrum (SpectrumAnalyzer.spectrum).
 ```ruby
 s = SpectrumAnalyzer.spectrum
 s.domains
 ```
-These domains are an array of frequencies that occur over the time slice defined by the window_size. The values are currently magnitudes of the complex numbers, and the complex numbers themselves. They represent the amplitude of the frequency ranges. 
+These domains are an array of frequencies that occur over the time slice defined by the window_size. The values are currently magnitudes of the complex numbers, and the complex numbers themselves. They represent the amplitude of the frequency ranges. The spectrum super class will contain the number of occurrences that match your analysis_ranges, and each domain will know if is an occurrence or not.
 
-Want them to be available as both complex and magnitudes? Let me know, or submit a pull request!
-
-More to come.
+The last feature before this is released as 0.2.0 will be quick_analyze. This will return true on the first occurrence of the analysis_ranges. This is useful if you are just trying to see if a wav file contains your ranges or not.
 
 ##Contributing to spectrum-analyzer
  
