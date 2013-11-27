@@ -28,7 +28,9 @@ You now have a bunch of "domains" held in the spectrum (SpectrumAnalyzer.spectru
 s = SpectrumAnalyzer.spectrum
 s.domains
 ```
-These domains are an array of frequencies that occur over the time slice defined by the window_size. The values are currently complex numbers, but they represent decibels of each frequency range in that window.
+These domains are an array of frequencies that occur over the time slice defined by the window_size. The values are currently magnitudes of the complex numbers, and represent the amplitude of each frequency range. 
+
+Want them to be available as both complex and magnitudes? Let me know, or submit a pull request!
 
 More to come.
 
