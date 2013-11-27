@@ -55,11 +55,12 @@ module SpectrumAnalyzer
     end
 
     def generate_domain(buffer)
-      wave = Array.new()
       windowed_array = apply_window(buffer.to_a, windows[@config.window_function])
-      wave.concat(windowed_array)
       na = NArray.to_na(windowed_array)
-      FFTW3.fft(na).to_a[0, @config.window_size/2]
+      fft_array = FFTW3.fft(na).to_a[0, @config.window_size/2]
+      domain = Array.new()
+      fft_array.each { |x| domain.push(x.magnitude)}
+      domain
     end
 
     def analyze_spectrum
