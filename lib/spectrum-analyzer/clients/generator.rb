@@ -115,22 +115,22 @@ module SpectrumAnalyzer
     end
 
     def analyze_for_hit(fft_array, index)
-      ranges = analysis_array
-
-      j=0
-      hit = Array.new()
-      #p "INDEX: #{index}"
-      ranges.each do |x|
-        sum_total = 0
-        for i in x[:b_index]..x[:t_index]
-          sum_total += fft_array[i] if !fft_array[i].nil?
-        end
-        average = sum_total / (x[:t_index] - x[:b_index])
-        hit[j] = average > x[:min] and average < x[:max]
-        j+=1
-      end
-      ping = !hit.include?(false)
-      return ping
+      #ranges = analysis_array
+      #
+      #j=0
+      #hit = Array.new()
+      ##p "INDEX: #{index}"
+      #ranges.each do |x|
+      #  sum_total = 0
+      #  for i in x[:b_index]..x[:t_index]
+      #    sum_total += fft_array[i] if !fft_array[i].nil?
+      #  end
+      #  average = sum_total / (x[:t_index] - x[:b_index])
+      #  hit[j] = average > x[:min] and average < x[:max]
+      #  j+=1
+      #end
+      #ping = !hit.include?(false)
+      #return ping
     end
 
   end
