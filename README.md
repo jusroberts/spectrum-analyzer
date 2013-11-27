@@ -1,3 +1,4 @@
+[![Code Climate](https://codeclimate.com/github/jusroberts/spectrum-analyzer.png)](https://codeclimate.com/github/jusroberts/spectrum-analyzer)
 # Ruby Sound Spectrum Analyzer
 
 Have you ever wanted to break apart a sound file and see what frequencies make it up? Well, you're in luck! This program does JUST THAT!!!!
