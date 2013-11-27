@@ -1,6 +1,6 @@
 module SpectrumAnalyzer
   class File
-    attr_accessor :name, :recording_frequency
+    attr_accessor :name, :sample_rate
 
     def initialize(name)
       @name = name || ''

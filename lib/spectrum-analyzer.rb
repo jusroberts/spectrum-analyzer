@@ -9,11 +9,11 @@ Dir[File.dirname(__FILE__) + '/spectrum-analyzer/criteria/*.rb'].each {| file| l
 module SpectrumAnalyzer
 
   def self.configuration
-    @configuration ||= SpectrumAnalyzer::Config.new
+    @configuration ||= SpectrumAnalyzer::Config.new()
   end
 
   def self.generate
-    SpectrumAnalyzer::Generator
+    SpectrumAnalyzer::Generator.new()
   end
 
   def self.analyze
@@ -25,10 +25,11 @@ module SpectrumAnalyzer
   end
 
   def self.file
-    @file ||= SpectrumAnalyzer::File
+    @file ||= SpectrumAnalyzer::File.new()
   end
 
   def self.spectrum
-    spectrum ||= SpectrumAnalyzer::Spectrum
+    @spectrum ||= SpectrumAnalyzer::Spectrum.new()
   end
+
 end
