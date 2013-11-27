@@ -1,8 +1,8 @@
-= spectrum-analyzer
+# Ruby Sound Spectrum Analyzer
 
 Have you ever wanted to break apart a sound file and see what frequencies make it up? Well, you're in luck! This program does JUST THAT!!!!
 
-== How do I do?
+##How do I do?
 
 Right now, it's very basic. You need to initiate all the processes by yourself.
 ```ruby
@@ -31,7 +31,7 @@ These domains are an array of frequencies that occur over the time slice defined
 
 More to come.
 
-== Contributing to spectrum-analyzer
+##Contributing to spectrum-analyzer
  
 * Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet.
 * Check out the issue tracker to make sure someone already hasn't requested it and/or contributed it.
