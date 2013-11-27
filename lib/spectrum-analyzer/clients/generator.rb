@@ -4,6 +4,7 @@ module SpectrumAnalyzer
       @config = SpectrumAnalyzer.configuration
       @file = build_file_info
       @spectrum = SpectrumAnalyzer.spectrum
+      @window_functions = SpectrumAnalyzer::WindowFunctions.new(@config.window_size)
     end
 
     def set_file(file)
@@ -26,25 +27,12 @@ module SpectrumAnalyzer
 
 
     def generate_spectrum
-      #For each FFT window built
-        #add FFT window to spectrum class
       begin
         buffer = RubyAudio::Buffer.float(@config.window_size)
         RubyAudio::Sound.open(@config.file_name) do |snd|
           while snd.read(buffer) != 0
-            fft_slice = generate_domain(buffer)
-            @spectrum.domains.push (SpectrumAnalyzer::Domain.new(fft_slice))
-            #i=0
-            #fft_slice.each { |x| spectrum[i] += x.magnitude; i+=1}
-            #
-            #spectrum_array[iterations] = fft_slice
-            #i = 0
-            #spectrum_array[iterations].each { |x| spectrum_array[iterations][i] = x.magnitude; i+=1}
-            #iterations += 1
-            #
-            #ping = analyze_for_hit(fft_slice, iterations - 1)
-            #return ping if ping
-            #hits += 1 if ping
+            domain = generate_domain(buffer)
+            @spectrum.domains.push (domain)
           end
         end
 
@@ -58,8 +46,8 @@ module SpectrumAnalyzer
       windowed_array = apply_window(buffer.to_a, windows[@config.window_function])
       na = NArray.to_na(windowed_array)
       fft_array = FFTW3.fft(na).to_a[0, @config.window_size/2]
-      domain = Array.new()
-      fft_array.each { |x| domain.push(x.magnitude)}
+      domain = SpectrumAnalyzer::Domain.new()
+      fft_array.each { |x| domain.raw_values.push(x); domain.values.push(x.magnitude)}
       domain
     end
 
@@ -79,8 +67,8 @@ module SpectrumAnalyzer
 
     def windows
       {
-          :hanning => hanning(@config.window_size),
-          :rectangle => rectangle(@config.window_size)
+          :hanning => @window_functions.hanning(),
+          :rectangle => @window_functions.rectangle()
       }
     end
 
@@ -97,18 +85,6 @@ module SpectrumAnalyzer
       windowed_array = Array.new()
       i=0
       buffer.each { |x| windowed_array[i] = x * window_type[i]; i+=1}
-    end
-
-    def hanning (window_size)
-      hannified_array = Array.new
-      i=0
-      (0..window_size).each { |x| hannified_array[i] = 0.5 - 0.5 * Math.cos(2 * Math::PI * i / window_size) ; i+=1}
-
-      hannified_array
-    end
-
-    def rectangle (window_size)
-      Array.new(window_size, 1)
     end
 
     def analysis_array
