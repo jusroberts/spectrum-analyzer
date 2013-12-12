@@ -12,16 +12,14 @@ module SpectrumAnalyzer
     @configuration ||= SpectrumAnalyzer::Config.new()
   end
 
-  def self.generate
-    SpectrumAnalyzer::Generator.new()
-  end
-
   def self.analyze
-    SpectrumAnalyzer::Analyze
+    configuration
+    SpectrumAnalyzer::Generator.new().build_spectrum
   end
 
   def self.quick_analyze
-    SpectrumAnalyzer::Generator.quick_analyze
+    configuration
+    SpectrumAnalyzer::Generator.new().quick_analyze
   end
 
   def self.file

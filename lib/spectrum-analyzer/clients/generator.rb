@@ -12,10 +12,19 @@ module SpectrumAnalyzer
     end
 
     def quick_analyze
-      #For each FFT window built
-        #check for hit
-          #return true if found
-      #return false
+      begin
+        buffer = RubyAudio::Buffer.float(@config.window_size)
+        RubyAudio::Sound.open(@config.file_name) do |snd|
+          while snd.read(buffer) != 0
+            domain = generate_domain(buffer)
+            return true if domain_contains_frequencies?(domain)
+          end
+        end
+
+      rescue => error
+        p "Error: " + error.to_s
+        exit
+      end
     end
 
     def build_spectrum
@@ -25,6 +34,22 @@ module SpectrumAnalyzer
 
     private
 
+    def domain_contains_frequencies?(domain)
+      j=0
+      match = Array.new()
+      @config.analysis_ranges.each do |range|
+        sum_total = 0
+        for i in range[:b_index]..range[:t_index]
+          sum_total += domain.values[i] if !domain.values[i].nil?
+        end
+        average = sum_total / (range[:t_index] - range[:b_index])
+        match[j] = average > range[:min] and average < range[:max]
+        j+=1
+      end
+      return !match.include?(false)
+
+    end
+
 
     def generate_spectrum
       begin
@@ -32,7 +57,7 @@ module SpectrumAnalyzer
         RubyAudio::Sound.open(@config.file_name) do |snd|
           while snd.read(buffer) != 0
             domain = generate_domain(buffer)
-            @spectrum.domains.push (domain)
+            @spectrum.domains.push(domain)
           end
         end
 
@@ -93,18 +118,7 @@ module SpectrumAnalyzer
     end
 
     def windows
-      {
-          :hanning => @window_functions.hanning(),
-          :rectangle => @window_functions.rectangle()
-      }
-    end
-
-    def gen_fft
-
-
-      #p hits
-      return false
-
+      @window_functions.windows()
     end
 
 
@@ -118,24 +132,6 @@ module SpectrumAnalyzer
       @config.analysis_array
     end
 
-    def analyze_for_hit(fft_array, index)
-      #ranges = analysis_array
-      #
-      #j=0
-      #hit = Array.new()
-      ##p "INDEX: #{index}"
-      #ranges.each do |x|
-      #  sum_total = 0
-      #  for i in x[:b_index]..x[:t_index]
-      #    sum_total += fft_array[i] if !fft_array[i].nil?
-      #  end
-      #  average = sum_total / (x[:t_index] - x[:b_index])
-      #  hit[j] = average > x[:min] and average < x[:max]
-      #  j+=1
-      #end
-      #ping = !hit.include?(false)
-      #return ping
-    end
 
   end
 end
