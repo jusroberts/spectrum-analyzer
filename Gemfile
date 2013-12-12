@@ -13,4 +13,5 @@ group :development do
   gem "simplecov", ">= 0"
   gem "ruby-audio"
   gem "fftw3"
+  gem "simplecov"
 end

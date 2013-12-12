@@ -1,33 +1,27 @@
 require 'ruby-audio'
 require 'fftw3'
 
-require_relative '../lib/spectrum-analyzer/config'
+#require_relative '../lib/spectrum-analyzer/config'
 
-Dir[File.dirname(__FILE__) + '/spectrum-analyzer/clients/*.rb'].each {| file| load file }
-Dir[File.dirname(__FILE__) + '/spectrum-analyzer/criteria/*.rb'].each {| file| load file }
+Dir[File.dirname(__FILE__) + '/spectrum-analyzer/*.rb'].each {| file| load file }
+Dir[File.dirname(__FILE__) + '/spectrum-analyzer/functions/*.rb'].each {| file| load file }
+Dir[File.dirname(__FILE__) + '/spectrum-analyzer/objects/*.rb'].each {| file| load file }
 
 module SpectrumAnalyzer
+  attr_accessor :analysis
 
-  def self.configuration
-    @configuration ||= SpectrumAnalyzer::Config.new()
+  def self.configuration(args = {})
+    @configuration ||= SpectrumAnalyzer::Config.new(args)
   end
 
   def self.analyze
     configuration
-    SpectrumAnalyzer::Generator.new().build_spectrum
+    SpectrumAnalyzer::Functions.analyze
   end
 
   def self.quick_analyze
     configuration
-    SpectrumAnalyzer::Generator.new().quick_analyze
-  end
-
-  def self.file
-    @file ||= SpectrumAnalyzer::File.new()
-  end
-
-  def self.spectrum
-    @spectrum ||= SpectrumAnalyzer::Spectrum.new()
+    SpectrumAnalyzer::Functions.quick_analyze
   end
 
 end
