@@ -21,19 +21,24 @@ module SpectrumAnalyzer
       def contains_frequencies?(frequency_ranges)
         j=0
         match = Array.new()
-        frequency_ranges.each do |range|
-          sum_total = 0
-          for i in range[:b_index]..range[:t_index]
-            sum_total += values[i] unless values[i].nil?
-          end
-          average = sum_total / (range[:t_index] - range[:b_index])
-          match[j] = average > range[:min] and average < range[:max]
+        frequency_ranges.each do |frequency_range|
+          match[j] = find_frequency_use(frequency_range)
           j+=1
         end
         return !match.include?(false)
       end
 
       private
+
+      def find_frequency_use(frequency_range)
+        sum_total = 0
+        for i in frequency_range[:b_index]..frequency_range[:t_index]
+          sum_total += values[i] unless values[i].nil?
+        end
+        average = sum_total / (frequency_range[:t_index] - frequency_range[:b_index])
+        average > frequency_range[:min] and average < frequency_range[:max]
+      end
+
 
       def fft_array_builder(windowed_buffer)
         na = NArray.to_na(windowed_buffer)
