@@ -4,17 +4,17 @@ module SpectrumAnalyzer
       
       def initialize
         @config = SpectrumAnalyzer.configuration
-        @analysis = SpectrumAnalyzer::Objects::Analysis.new(@config.file_name)
         @window_functions = SpectrumAnalyzer::WindowFunctions.new(@config.window_size)
+        @analysis = SpectrumAnalyzer::Objects::Analysis.new(@config.file_name)
       end
 
+      #rename to contains_frequency_range?
       def quick_analyze
         begin
           buffer = RubyAudio::Buffer.float(@config.window_size)
           RubyAudio::Sound.open(@config.file_name) do |snd|
             while snd.read(buffer) != 0
-              domain = generate_domain(buffer)
-              return true if domain_contains_frequencies?(domain)
+              return true if quick_analyze_buffer(buffer)
             end
           end
   
@@ -30,31 +30,27 @@ module SpectrumAnalyzer
       end
   
       private
-  
-      def domain_contains_frequencies?(domain)
-        j=0
-        match = Array.new()
-        @config.analysis_ranges.each do |range|
-          sum_total = 0
-          for i in range[:b_index]..range[:t_index]
-            sum_total += domain.values[i] if !domain.values[i].nil?
-          end
-          average = sum_total / (range[:t_index] - range[:b_index])
-          match[j] = average > range[:min] and average < range[:max]
-          j+=1
-        end
-        return !match.include?(false)
-  
+
+      def quick_analyze_buffer(buffer)
+        return true if domain_contains_frequencies?(generate_domain(buffer))
       end
-  
-  
+
+      def generate_domain(buffer)
+        windowed_buffer = apply_window(buffer.to_a, windows[@config.window_function])
+        SpectrumAnalyzer::Objects::Domain.new(windowed_buffer)
+      end
+
+      def domain_contains_frequencies?(domain)
+        domain.contains_frequencies?(@config.analysis_ranges)
+      end
+
       def generate_spectrum
         begin
           buffer = RubyAudio::Buffer.float(@config.window_size)
           RubyAudio::Sound.open(@config.file_name) do |snd|
             while snd.read(buffer) != 0
-              domain = generate_domain(buffer)
-              @analysis.spectrum.domains.push(domain)
+              windowed_buffer = apply_window(buffer.to_a, windows[@config.window_function])
+              @analysis.add_domain_to_spectrum(windowed_buffer)
             end
           end
   
@@ -62,49 +58,19 @@ module SpectrumAnalyzer
           error(err)
         end
       end
-  
+
+      #this should be a function in spectrum class
       def sum_domains
-        @analysis.spectrum.entire_spectrum = Array.new(@analysis.spectrum.domains[0].values.length, 0)
-        @analysis.spectrum.domains.each do |domain|
-          @analysis.spectrum.entire_spectrum.map!.with_index{ |x,i| x + domain.values[i]}
-        end
+        @analysis.sum_spectrum
       end
-  
-      def generate_domain(buffer)
-        windowed_array = apply_window(buffer.to_a, windows[@config.window_function])
-        na = NArray.to_na(windowed_array)
-        fft_array = FFTW3.fft(na).to_a[0, @config.window_size/2]
-        domain = SpectrumAnalyzer::Objects::Domain.new()
-        fft_array.each { |x| domain.raw_values.push(x); domain.values.push(x.magnitude)}
-        domain
-      end
-  
+
       def analyze_spectrum
         sum_domains
         find_occurrences
       end
-  
+
       def find_occurrences
-        ranges = @config.analysis_ranges
-        occurrence_count = 0
-        @analysis.spectrum.domains.each do |domain|
-          ranges.each do |range|
-            if find_occurrence(range, domain)
-              occurrence_count += 1
-              domain.contains_frequency_range = true
-            end
-          end
-        end
-        @analysis.spectrum.num_occurrences = occurrence_count
-      end
-  
-      def find_occurrence (range, domain)
-        sum_total = 0
-        for i in range[:b_index]..range[:t_index]
-          sum_total += domain.values[i] if !domain.nil?
-        end
-        average = sum_total / (range[:t_index] - range[:b_index])
-        average > range[:min] and average < range[:max]
+        @analysis.sum_occurrences
       end
   
       def windows
