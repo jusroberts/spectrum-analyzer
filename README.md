@@ -9,7 +9,7 @@ Right now, it's very basic. You need to initiate all the processes by yourself.
 ```ruby
 require 'spectrum-analyzer'
 ```
-configure your stuff
+Setup your configuration:
 ```ruby
 c = SpectrumAnalyzer.configuration
 c.file_name = "whatever"
