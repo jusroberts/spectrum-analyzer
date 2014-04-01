@@ -9,5 +9,9 @@ module SpectrumAnalyzer
       SpectrumAnalyzer::Functions::Generator.new().quick_analyze
     end
 
+    def self.contains_frequency_range?
+      SpectrumAnalyzer::Functions::Generator.new().contains_frequency_range?
+    end
+
   end
 end

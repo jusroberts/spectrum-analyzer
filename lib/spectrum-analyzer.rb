@@ -24,4 +24,9 @@ module SpectrumAnalyzer
     SpectrumAnalyzer::Functions.quick_analyze
   end
 
+  def self.contains_frequency_range?
+    configuration
+    SpectrumAnalyzer::Functions.contains_frequency_range?
+  end
+
 end

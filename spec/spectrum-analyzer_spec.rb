@@ -20,8 +20,12 @@ describe "SpectrumAnalyzer" do
   )
 
   end
-  it 'returns true if matches are found in the analysis' do\
+  it 'returns true if matches are found in the analysis' do
     SpectrumAnalyzer.quick_analyze.should == true
+  end
+
+  it 'returns true if matches are found in the analysis' do
+    SpectrumAnalyzer.contains_frequency_range?.should == true
   end
 
   it 'creates an analysis object with information about the analysis performed' do

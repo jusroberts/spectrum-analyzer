@@ -8,6 +8,10 @@ module SpectrumAnalyzer
         @analysis = SpectrumAnalyzer::Objects::Analysis.new(@config.file_name)
       end
 
+      def contains_frequency_range?
+        quick_analyze
+      end
+
       #rename to contains_frequency_range?
       def quick_analyze
         begin
